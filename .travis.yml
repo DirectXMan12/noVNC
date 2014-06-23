@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- '0.11'
+env:
+  global:
+  - secure: QVB5rKM1E8Idz9mIf1CnYSMSFibJBDtGpevFRuRwcpWLbZLb7KOhBezbFS92hS7KZ93hmNEnDgozy8wMxYuFZoPilva0ccU44C6On9HZylh7tBJBWRL5MFQtoYV7m3cyQ2xgcUA1DeC8mFTTpa/FUaE8V9p//+LGHHfgv1dQ2lc=
+  - secure: Qk55ShllNqR3nITrxXOYxKG/TEVW2lhmvvfbj31+h3cfrqlnuHcI4tSWlDN6gbFNCE/SCMlZLUyoTDAxtbwABSprQXRw3Qtxrs1RCUmJH2bhpMW3gTY6Qd/6uPXqAknFwwkqz7D4iEA1i6bEJ9lcgqlHocgzglSWgpN+HVcPefM=
+  matrix:
+  - "TEST_BROWSER_NAME=PhantomJS"
+  - "TEST_BROWSER_NAME=chrome TEST_BROWSER_OS='Windows 7,Linux'"
+  - "TEST_BROWSER_NAME=firefox TEST_BROWSER_OS='Windows 7,Linux' TEST_BROWSER_VERSION='30,26'"
+  - "TEST_BROWSER_NAME='internet explorer' TEST_BROWSER_OS='Windows 7' TEST_BROWSER_VERSION=10"
+  - "TEST_BROWSER_NAME='internet explorer' TEST_BROWSER_OS='Windows 8.1' TEST_BROWSER_VERSION=11"
+  - "TEST_BROWSER_NAME=safari TEST_BROWSER_OS='OS X 10.8' TEST_BROWSER_VERSION=6"
+  - "TEST_BROWSER_NAME=safari TEST_BROWSER_OS='OS X 10.9' TEST_BROWSER_VERSION=7"
+before_script: npm install -g karma-cli
