@@ -11,6 +11,7 @@
 /* [module]
  * import Util from "../util";
  * import KeyboardUtil from "./util";
+ * import KeyWrangler from "./keywrangler";
  */
 
 /* [module] export */ var Keyboard;
@@ -32,20 +33,31 @@
         });
 
         // create the keyboard handler
-        this._handler = new KeyboardUtil.KeyEventDecoder(KeyboardUtil.ModifierSync(),
-            KeyboardUtil.VerifyCharModifier( /* jshint newcap: false */
-                KeyboardUtil.TrackKeyState(
-                    KeyboardUtil.EscapeModifiers(this._handleRfbEvent.bind(this))
+        // this._handler = new KeyboardUtil.KeyEventDecoder(KeyboardUtil.ModifierSync(),
+        //     KeyboardUtil.VerifyCharModifier( /* jshint newcap: false */
+        //         KeyboardUtil.TrackKeyState(
+        //             KeyboardUtil.EscapeModifiers(this._handleRfbEvent.bind(this))
+        //         )
+        //     )
+        // ); /* jshint newcap: true */
+
+        this._handler = new KeyWrangler.ModifierKeyFakingFilter(
+            new KeyWrangler.KeySymEnricherFilter(
+                new KeyWrangler.TerminalKeyFilter(
+                    this._handleRfbEvent.bind(this)
                 )
-            )
-        ); /* jshint newcap: true */
+            ),
+            []
+        );
 
         // keep these here so we can refer to them later
         this._eventHandlers = {
             'keyup': this._handleKeyUp.bind(this),
             'keydown': this._handleKeyDown.bind(this),
             'keypress': this._handleKeyPress.bind(this),
-            'blur': this._allKeysUp.bind(this)
+            'blur': this._allKeysUp.bind(this),
+            'input': this._handleInput.bind(this)
+            // TODO: actually get input events?
         };
     };
 
@@ -61,11 +73,11 @@
         },
 
         setQEMUVNCKeyboardHandler: function () {
-            this._handler = new KeyboardUtil.QEMUKeyEventDecoder(KeyboardUtil.ModifierSync(),
+            /*this._handler = new KeyboardUtil.QEMUKeyEventDecoder(KeyboardUtil.ModifierSync(),
                 KeyboardUtil.TrackQEMUKeyState(
                     this._handleRfbEvent.bind(this)
                 )
-            );
+            );*/
         },
 
         _handleKeyDown: function (e) {
@@ -85,7 +97,22 @@
         _handleKeyPress: function (e) {
             if (!this._focused) { return true; }
 
-            if (this._handler.keypress(e)) {
+            //if (this._handler.keypress(e)) {
+            if (this._handler.beforeinput(new Event('beforeinput', {data: e.key}))) {
+                // Suppress bubbling/default actions
+                Util.stopEvent(e);
+                return false;
+            } else {
+                // Allow the event to bubble and become a keyPress event which
+                // will have the character code translated
+                return true;
+            }
+        },
+
+        _handleInput: function (e) {
+            if (!this._focused) { return true; }
+
+            if (this._handler.beforeinput(e)) {
                 // Suppress bubbling/default actions
                 Util.stopEvent(e);
                 return false;
@@ -148,7 +175,8 @@
         },
 
         sync: function (e) {
-            this._handler.syncModifiers(e);
+            // TODO: implement this for KeyWrangler filters
+            //this._handler.syncModifiers(e);
         }
     };
 
