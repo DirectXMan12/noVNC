@@ -55,7 +55,7 @@
         _handleRfbEvent: function (e) {
             if (this._onKeyPress) {
                 Util.Debug("onKeyPress " + (e.type == 'keydown' ? "down" : "up") +
-                           ", keysym: " + e.keysym.keysym + "(" + e.keysym.keyname + ")");
+                           ", keysym: " + e.keysym + "(" + e.code + " as " + e.key + ")");
                 this._onKeyPress(e);
             }
         },

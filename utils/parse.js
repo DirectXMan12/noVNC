@@ -85,16 +85,13 @@ var out = "// This file describes mappings from Unicode codepoints to the keysym
 "    var keynames = {keysyms};\n" +
 "    var codepoints = {codepoints};\n" +
 "\n" +
-"    function lookup(k) { return k ? {keysym: k, keyname: keynames ? keynames[k] : k} : undefined; }\n" +
 "    return {\n" +
 "        fromUnicode : function(u) {\n" +
 "            var keysym = codepoints[u];\n" +
 "            if (keysym === undefined) {\n" +
 "                keysym = 0x01000000 | u;\n" +
 "            }\n" +
-"            return lookup(keysym);\n" +
 "        },\n" +
-"        lookup : lookup\n" +
 "    };\n" +
 "})();\n";
 out = out.replace('{keysyms}', use_keynames ? JSON.stringify(keysyms) : "null");

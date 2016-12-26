@@ -27,7 +27,7 @@
     <script src="../app/webutil.js"></script>
     <script src="../core/base64.js"></script>
     <script src="../core/input/keysym.js"></script>
-    <script src="../core/input/keysymdef.js"></script> 
+    <script src="../core/input/keysymdef.js"></script>
     <script src="../core/input/xtscancodes.js"></script>
     <script src="../core/input/util.js"></script>
     <script src="../core/input/devices.js"></script>
@@ -61,19 +61,15 @@
             //console.log(msg);
         }
 
-        function rfbKeyPress(keysym, down) {
+        function rfbKeyPress(evt, down) {
             var d = down ? "down" : " up ";
-            var key = keysyms.lookup(keysym);
-            var msg = "RFB keypress " + d + " keysym: " + keysym;
-            if (key && key.keyname) {
-                msg += " key name: " + key.keyname;
-            }
+            var msg = "RFB keypress " + d + " keysym: " + evt.keysym + ", code: " + evt.code;
             message(msg);
         }
         function rawKey(e) {
             msg = "raw key event " + e.type +
-                  " (key: " + e.keyCode + ", char: " + e.charCode +
-                  ", which: " + e.which +")";
+                  " (key: " + e.key + ", code: " + e.code +
+                  ", location: " + e.location +")";
             message(msg);
         }
 

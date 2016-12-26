@@ -1528,7 +1528,7 @@ var UI;
                 UI.rfb.sendKey(KeyTable.XK_BackSpace);
             }
             for (i = newLen - inputs; i < newLen; i++) {
-                UI.rfb.sendKey(keysyms.fromUnicode(newValue.charCodeAt(i)).keysym);
+                UI.rfb.sendKey(keysyms.fromUnicode(newValue.charCodeAt(i)));
             }
 
             // Control the text content length in the keyboardinput element
